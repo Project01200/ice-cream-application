@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ice Cream Shop</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Welcome to the Ice Cream Shop</h1>
+  </header>
+  <main>
+    <section id="search">
+      <input type="text" id="searchBox" placeholder="Search for ice cream...">
+      <button type="button" onclick="searchIceCream()">Search</button>
+    </section>
+    <section id="iceCreams">
+      <h2>Ice Cream Varieties</h2>
+      <div class="iceCreamsContainer">
+        {% for ice_cream in ice_creams %}
+          <div class="iceCream">
+            <input type="radio" name="iceCream" id="{{ ice_cream.name }}" value="{{ ice_cream.name }}" onchange="updateIngredients()">
+            <label for="{{ ice_cream.name }}">{{ ice_cream.name }} - ${{ ice_cream.price }}</label>
+            {% if ice_cream.image %}
+              <button type="button" onclick="document.getElementById('{{ ice_cream.name }}').checked = true; updateIngredients()">
+                <img src="{{ ice_cream.image.url }}" alt="{{ ice_cream.name }} Ice Cream">
+              </button>
+            {% else %}
+              <button type="button" onclick="document.getElementById('{{ ice_cream.name }}').checked = true; updateIngredients()">
+                <img src="default-ice-cream.png" alt="{{ ice_cream.name }} Ice Cream">
+              </button>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+    <button id="checkoutButton" onclick="goToCheckout()">Checkout</button>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

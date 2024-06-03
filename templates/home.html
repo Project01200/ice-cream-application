@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %} Home {% endblock title %}
+{% block body %}
+{% load static %}
+
+<div class="Home">
+  <h1>Welcome to the Ice Cream Shop</h1>
+  <img src="{% static 'icecream_shop/images/ice-cream-shop.jpg' %}">
+  <button type="button">Go to Orders</button>
+</div>
+
+{% endblock body %}

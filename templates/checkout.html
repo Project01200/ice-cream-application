@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Checkout</h1>
+    </header>
+    <main>
+        <section id="orderSummary">
+            <h2>Order Summary</h2>
+            <p id="summaryText"></p>
+            <h3>Total: $<span id="totalPrice"></span></h3>
+        </section>
+        <section id="coupon">
+            <h2>Apply Coupon</h2>
+            <input type="text" id="couponCode" placeholder="Enter coupon code">
+            <button onclick="applyCoupon()">Apply</button>
+        </section>
+        <button onclick="finalizeOrder()">Finalize Order</button>
+    </main>
+    <footer>
+        <p>&copy; 2024 Ice Cream Shop. All rights reserved.</p>
+    </footer>
+
+    <script src="checkout.js"></script>
+</body>
+</html>
