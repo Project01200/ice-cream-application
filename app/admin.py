@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import IceCreamFlavour,Toppings,Container,Size,Ingredients
+from .models import IceCreamFlavours,Toppings,Containers,Size,Ingredients
 
-admin.site.register(IceCreamFlavour)
+admin.site.register(IceCreamFlavours)
 admin.site.register(Toppings)
-admin.site.register(Container)
+admin.site.register(Containers)
 admin.site.register(Size)
 admin.site.register(Ingredients)
