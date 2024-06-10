@@ -22,7 +22,7 @@ class IceCreamFlavours(models.Model):
         return self.name
     
 class Toppings(models.Model):
-    topping_name = models.CharField(max_length=20)
+    topping_name = models.CharField(max_length=20, unique=True)
     topping_price = models.IntegerField()
     topping_desc = models.TextField()
 
@@ -49,3 +49,14 @@ class Size(models.Model):
 
     def __str__(self):
         return f"{self.scoop_size} scoops"
+    
+class MyOrders(models.Model):
+    name=models.CharField(max_length=30)
+    email=models.EmailField()
+    items=models.CharField(max_length=1500)
+    quantity=models.CharField(max_length=100)
+    price=models.CharField(max_length=100)
+    phone_num=models.CharField(max_length=10)
+    
+    def __int__(self):
+        return self.id

@@ -53,6 +53,9 @@ footer {
 }
 
 button {
+    position:absolute;
+    top:100px;
+    left:200px;
     padding: 1rem 2rem;
     background-color: #007bff;
     color: white;
