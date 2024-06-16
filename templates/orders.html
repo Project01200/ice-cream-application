@@ -1,223 +1,205 @@
+<!-- app/templates/orders.html -->
+
 {% extends "base.html" %}
 {% block title %} Orders {% endblock title %}
 {% block body %}
 {% load static %}
 
-<div class="row">
-
-  <div class="col-md-4">
-    
 <div class="container mt-2">
-  {% include "messages.html" %}  
-  <div class="card bg-light p-4">
-    <div class="card-body">
-      <form action="orders" method="post">
-        {% csrf_token %}
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card bg-light p-4">
+        <div class="card-body">
+          <form id="orderForm" action="orders" method="post">
+            {% csrf_token %}
 
-        <div class="form-group">
-          <label for="name">Full Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            class="form-control mb-3"
-            placeholder="Enter Your Name"
-            value="{{user.username}}"
-            required
-          />
+            <!-- Full Name -->
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" class="form-control mb-3" placeholder="Enter Your Name" value="{% if user.is_authenticated %}{{ user.username }}{% endif %}" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" class="form-control mb-3" placeholder="Enter Your Email Address" value="{% if user.is_authenticated %}{{ user.email }}{% endif %}" required>
+            </div>
+
+            <!-- Select Container -->
+            <div class="form-group">
+              <label for="container">Select Container Type</label>
+              <select id="container" class="form-control" name="container" required>
+                <option selected disabled>Choose...</option>
+                {% for container in containers %}
+                <option value="{{ container.id }}">{{ container.name }} - Rs {{ container.price }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Select Scoop Size (if cup type container is chosen) -->
+            <div id="scoopSizeGroup" style="display: none;">
+              <div class="form-group">
+                <label for="scoopSize">Select Scoop Size</label>
+                <select id="scoopSize" class="form-control" name="scoopSize">
+                  <option selected disabled>Choose...</option>
+                  {% for size in scoop_sizes %}
+                  <option value="{{ size.id }}">{{ size.name }} - Rs {{ size.price }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <!-- Select Ice Cream Flavor -->
+            <div class="form-group">
+              <label for="flavor">Select Ice Cream Flavor</label>
+              <select id="flavor" class="form-control" name="flavor" required>
+                <option selected disabled>Choose...</option>
+                {% for flavor in flavors %}
+                <option value="{{ flavor.id }}">{{ flavor.name }} - Rs {{ flavor.price }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Select Toppings -->
+            <div class="form-group">
+              <label for="toppings">Select Toppings</label>
+              <select id="toppings" class="form-control" name="toppings">
+                <option selected disabled>Choose...</option>
+                {% for topping in toppings %}
+                <option value="{{ topping.id }}">{{ topping.name }} - Rs {{ topping.price }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Quantity -->
+            <div class="form-group">
+              <label for="quantity">Quantity</label>
+              <select id="quantity" class="form-control" name="quantity" required>
+                <option selected disabled>Choose...</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid gap-2">
+              <button class="btn btn-dark" type="submit">Place Order</button>
+            </div>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="num">Phone Number</label>
-          <input
-            type="tel"
-            id="num"
-            name="num"
-            class="form-control mb-3"
-            pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
-         
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="name">Email</label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            class="form-control mb-3"
-            value="{{user.email}}"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-            <label for="items">Select Ice Cream</label>
-            <select id="items" class="form-control" name="items">
-              <option selected>Choose...</option>
-
-          
-              {% for i in mymed %}
-              <option value="{{i.medicine_name}}">{{i.medicine_name}}</option>
-              {% endfor %}
-              {% for j in myprod %}
-              <option value="{{j.prod_name}}">{{j.prod_name}}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="items">Select Toppings</label>
-            <select id="items" class="form-control" name="items">
-              <option selected>Choose...</option>
-
-          
-              {% for i in mymed %}
-              <option value="{{i.medicine_name}}">{{i.medicine_name}}</option>
-              {% endfor %}
-              {% for j in myprod %}
-              <option value="{{j.prod_name}}">{{j.prod_name}}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="items">Select Containers</label>
-            <select id="items" class="form-control" name="items">
-              <option selected>Choose...</option>
-
-          
-              {% for i in mymed %}
-              <option value="{{i.medicine_name}}">{{i.medicine_name}}</option>
-              {% endfor %}
-              {% for j in myprod %}
-              <option value="{{j.prod_name}}">{{j.prod_name}}</option>
-              {% endfor %}
-            </select>
-          </div>
-        <div class="form-group">
-            <label for="quantity">Scoops</label>
-            <select id="quantity" class="form-control" name="quantity">
-              <option selected>Choose...</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-         
-
-        
-            </select>
-          </div>
-
-          <div class="form-group form-check">
-          </div>
-          <div class="d-grid gap-2">
-            <button class="btn btn-dark" type="submit">Place Order</button>
-          </div>
-
-
-
-
-
-
-
-      </form>
+      </div>
     </div>
-  </div>
-  
-</div>
 
-  </div>
-  <div class="col-md-8">
+    <div class="col-md-8">
+      <div class="container mt-2">
+        <h2 class="display-4">Orders</h2>
 
-    <div class="container mt-2">
-      <h2 class="display-4">Orders</h2>
-
-      <table class="table table-danger table-striped">
-        <thead>
+        <table class="table table-danger table-striped">
+          <thead>
           <tr>
             <th scope="col">Order ID</th>
             <th scope="col">Name</th>
-            <th scope="col">Ice Cream Flavour</th>
+            <th scope="col">Ice Cream Flavor</th>
             <th scope="col">Toppings</th>
-            <th scope="col">Containers</th>
+            <th scope="col">Container</th>
             <th scope="col">Price</th>
             <th scope="col">Cancel</th>
             <th scope="col">Status</th>
           </tr>
-        </thead>
-        <tbody>
-         
-
+          </thead>
+          <tbody>
           {% for item in items %}
           <tr>
-            <th scope="row">{{item.id}}</th>
-            <td>{{item.name}}</td>
-            <td>{{item.items}}</td>
-            <td>{{item.price}} {{item.delivery}}</td>
-           {% if item.delivery %}
-           <td><button type="button" class="btn-success p-2"  href="/orders/{{item.id}}" disabled> <i class="fa-solid fa-trash-can"></i></button></td>
-           
-           {% else %}
-           <td><a type="button" class="btn-danger p-2" href="/orders/{{item.id}}"> <i class="fa-solid fa-trash-can"></i></a></td>
-           {% endif %}
-
-
-            {% if item.delivery %}
-            <td><i class="fa-solid fa-circle-check"></i> Delivered</td>
-            {% else %}
-            <td> <i class="fa-solid fa-truck"></i> Not Delivered</td>
-            {% endif %}
-            
-          
+            <th scope="row">{{ item.id }}</th>
+            <td>{{ item.name }}</td>
+            <td>{{ item.flavor }}</td>
+            <td>{{ item.toppings }}</td>
+            <td>{{ item.container }}</td>
+            <td>{{ item.price }}</td>
+            <td>
+              {% if item.delivery %}
+              <button type="button" class="btn btn-success btn-sm" disabled>
+                <i class="fa fa-check"></i> Delivered
+              </button>
+              {% else %}
+              <a href="/orders/{{ item.id }}/cancel" class="btn btn-danger btn-sm">
+                <i class="fa fa-trash"></i> Cancel
+              </a>
+              {% endif %}
+            </td>
+            <td>
+              {% if item.delivery %}
+              <span class="text-success"><i class="fa fa-check-circle"></i> Delivered</span>
+              {% else %}
+              <span class="text-warning"><i class="fa fa-truck"></i> In Transit</span>
+              {% endif %}
+            </td>
           </tr>
-          
           {% endfor %}
-         
-        </tbody>
-      </table>
-
-
-
-
-
-
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
+
 <script>
+  // Show/hide scoop size based on container type selection
   document.addEventListener('DOMContentLoaded', function() {
+      const containerSelect = document.getElementById('container');
+      const scoopSizeGroup = document.getElementById('scoopSizeGroup');
+
+      containerSelect.addEventListener('change', function() {
+          if (this.value === 'cup') {
+              scoopSizeGroup.style.display = 'block';
+          } else {
+              scoopSizeGroup.style.display = 'none';
+          }
+      });
+
+      // Submit form after calculating total price
       const orderForm = document.getElementById('orderForm');
-      const totalPriceSpan = document.getElementById('totalPrice');
-      
-      // Function to calculate total price
-      function calculateTotalPrice() {
-          let totalPrice = 0;
-          
-          // Get selected ice cream price
-          const iceCreamPrice = parseFloat(document.getElementById('iceCream').value);
-          totalPrice += iceCreamPrice;
-          
-          // Get selected toppings prices
-          const toppingsSelect = document.getElementById('toppings');
-          const selectedToppings = Array.from(toppingsSelect.selectedOptions).map(option => parseFloat(option.value));
-          totalPrice += selectedToppings.reduce((acc, val) => acc + val, 0);
-          
-          // Get selected container price
-          const containerPrice = parseFloat(document.getElementById('containers').value);
-          totalPrice += containerPrice;
-          
-          // Get selected quantity
-          const quantity = parseFloat(document.getElementById('quantity').value);
-          totalPrice *= quantity;
-          
-          // Update total price in the HTML
-          totalPriceSpan.textContent = totalPrice.toFixed(2);
-      }
-      
-      // Event listener for form submission
       orderForm.addEventListener('submit', function(event) {
           event.preventDefault();
           calculateTotalPrice();
           this.submit();
       });
+
+      // Function to calculate total price
+      function calculateTotalPrice() {
+          let totalPrice = 0;
+
+          // Add container price
+          const containerPrice = parseFloat(containerSelect.options[containerSelect.selectedIndex].text.split(' Rs ')[1]);
+          totalPrice += containerPrice;
+
+          // Add scoop size price if applicable
+          if (scoopSizeGroup.style.display === 'block') {
+              const scoopSizePrice = parseFloat(document.getElementById('scoopSize').value.split(' Rs ')[1]);
+              totalPrice += scoopSizePrice;
+          }
+
+          // Add ice cream flavor price
+          const flavorPrice = parseFloat(document.getElementById('flavor').value.split(' Rs ')[1]);
+          totalPrice += flavorPrice;
+
+          // Add toppings price if selected
+          const toppingsSelect = document.getElementById('toppings');
+          const toppingsPrice = parseFloat(toppingsSelect.options[toppingsSelect.selectedIndex].text.split(' Rs ')[1]);
+          totalPrice += toppingsPrice;
+
+          // Multiply by quantity
+          const quantity = parseInt(document.getElementById('quantity').value);
+          totalPrice *= quantity;
+
+          // Update total price display (if needed)
+          // const totalPriceSpan = document.getElementById('totalPrice');
+          // totalPriceSpan.textContent = totalPrice.toFixed(2);
+      }
   });
 </script>
-    {% endblock body %}
+
+{% endblock body %}
+
+
