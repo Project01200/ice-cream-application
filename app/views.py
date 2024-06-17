@@ -118,8 +118,8 @@ def myorders(request):
 
             pass
         for i in mytop:
-            if item == i.prod_name:
-                price = i.prod_price
+            if item == i.topping_name:
+                price = i.topping_price
 
             pass
 
