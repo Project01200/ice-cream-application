@@ -31,7 +31,7 @@
               <select id="container" class="form-control" name="container" required>
                 <option selected disabled>Choose...</option>
                 {% for container in containers %}
-                <option value="{{ container.id }}">{{ container.name }} - Rs {{ container.price }}</option>
+                <option value="{{ container.id }}">{{ container.name }}</option>
                 {% endfor %}
               </select>
             </div>
@@ -51,7 +51,7 @@
 
             <!-- Select Ice Cream Flavor -->
             <div class="form-group">
-              <label for="flavor">Select Ice Cream Flavor</label>
+              <label for="flavor">Select Toppings</label>
               <select id="flavor" class="form-control" name="flavor" required>
                 <option selected disabled>Choose...</option>
                 {% for flavor in flavors %}
@@ -62,14 +62,17 @@
 
             <!-- Select Toppings -->
             <div class="form-group">
-              <label for="toppings">Select Toppings</label>
-              <select id="toppings" class="form-control" name="toppings">
-                <option selected disabled>Choose...</option>
-                {% for topping in toppings %}
-                <option value="{{ topping.id }}">{{ topping.name }} - Rs {{ topping.price }}</option>
+              <label for="items">Select Flavours</label>
+              <select id="items" class="form-control" name="items">
+                <option selected>Choose...</option>
+                {% for flavor in flavors %}
+                <option value="{{ flavor.id }}">{{ flavor.name }}</option>
                 {% endfor %}
               </select>
             </div>
+
+
+
 
             <!-- Quantity -->
             <div class="form-group">
