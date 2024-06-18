@@ -1,10 +1,9 @@
-from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 
-from app.models import IceCreamFlavours, Toppings, MyOrders
+from app.models import IceCreamFlavours, Toppings, MyOrders, Containers
 
 
 def Home(request):
@@ -87,6 +86,11 @@ def toppings(request):
     context = {"mytop": mytop}
     return render(request, "toppings.html", context)
 
+def containers(request):
+    mycont = Containers.objects.all()
+    context = {"mycont": mycont}
+    return render(request, "containers.html", context)
+
 
 def myorders(request):
     if not request.user.is_authenticated:
@@ -109,7 +113,7 @@ def myorders(request):
         item = request.POST.get("items")
         quan = request.POST.get("quantity")
         phone = request.POST.get("num")
-        print(name, email, item, quan, address, phone)
+        print(name, email, item, quan, phone)
 
         price = ""
         for i in myflav:

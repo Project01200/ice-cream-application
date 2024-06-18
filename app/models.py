@@ -1,3 +1,5 @@
+
+
 from django.db import models
 
 
@@ -10,7 +12,9 @@ class MyOrders(models.Model):
     phone_num = models.CharField(max_length=15)
 
     def __str__(self):
-        return f"Order {self.id} by {self.name}"
+        return f"Order {self.pk} by {self.name}"
+
+
 # class Orders(models.Model):
 #     name = models.CharField(max_length=50)
 #     email = models.EmailField()
@@ -28,7 +32,6 @@ class MyOrders(models.Model):
 class IceCreamFlavours(models.Model):
     name = models.CharField(max_length=20)
     price = models.IntegerField()
-    desc = models.TextField()
 
     def __str__(self):
         return self.name
@@ -37,7 +40,6 @@ class IceCreamFlavours(models.Model):
 class Toppings(models.Model):
     topping_name = models.CharField(max_length=20, unique=True)
     topping_price = models.IntegerField()
-    topping_desc = models.TextField()
 
     def __str__(self):
         return self.topping_name
@@ -52,11 +54,17 @@ class Containers(models.Model):
 
 
 class Ingredients(models.Model):
-    food_item = models.CharField(max_length=20)
-    ingredients = models.CharField(max_length=500)
+    flavour = models.ForeignKey(IceCreamFlavours, on_delete=models.CASCADE)
+    flavour_ingredients = models.TextField()
+
+    container = models.ForeignKey(Containers, on_delete=models.CASCADE)
+    container_ingredients = models.TextField()
+
+    toppings = models.ForeignKey(Toppings, on_delete=models.CASCADE)
+    toppings_ingredients = models.TextField()
 
     def __str__(self):
-        return self.food_item
+        return f"Ingredients for {self.flavour}"
 
 
 class Size(models.Model):

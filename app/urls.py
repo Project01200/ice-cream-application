@@ -12,5 +12,6 @@ urlpatterns = [
     # path('myorders/', views.myorders, name='myorders'),
     path('search/', views.search, name='search'),
     path('deleteOrder/<int:id>/', views.deleteOrder, name='deleteOrder'),
-    path('toppings/', views.toppings, name='toppings')
+    path('toppings/', views.toppings, name='toppings'),
+    path('containers/', views.containers, name='containers')
 ]

@@ -101,8 +101,11 @@
             <th scope="col">Order ID</th>
             <th scope="col">Name</th>
             <th scope="col">Ice Cream Flavor</th>
+            <th scope="col">Flavors Ingredients</th>
             <th scope="col">Toppings</th>
+            <th scope="col">Toppings Ingredients</th>
             <th scope="col">Container</th>
+            <th scope="col">Container Ingredients</th>
             <th scope="col">Price</th>
             <th scope="col">Cancel</th>
             <th scope="col">Status</th>
@@ -175,7 +178,7 @@
           totalPrice += containerPrice;
 
           // Add scoop size price if applicable
-          if (scoopSizeGroup.style.display === 'block') {
+          is (scoopSizeGroup.style.display === 'block') {
               const scoopSizePrice = parseFloat(document.getElementById('scoopSize').value.split(' Rs ')[1]);
               totalPrice += scoopSizePrice;
           }

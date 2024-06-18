@@ -1,26 +1,26 @@
 <!-- app/templates/toppings_selection.html -->
 
 {% extends "base.html" %}
-{% block title %} Toppings {% endblock title %}
+{% block title %} Containers {% endblock title %}
 {% block body %}
 {% load static %}
 
 <div class="container mt-2">
-    <h2 class="display-4 text-success text-center">Toppings</h2>
+    <h2 class="display-4 text-success text-center">Containers</h2>
     <hr>
 
     <div class="row">
-        {% for topping in toppings %}
+        {% for container in containers %}
         <div class="col-md-4 bg-light p-5">
             <div class="card" style="width: 20rem;">
                 <div class="card-body">
-                    <h6 class="card-title display-4 text-primary">{{ topping.name }}</h6>
-                    <p class="text-success bg-light">Price: {{ topping.price }} Rs</p>
+                    <h6 class="card-title display-4 text-primary">{{ container.name }}</h6>
+                    <p class="text-success bg-light">Price: {{ container.price }} Rs</p>
 
                     <!-- Ingredients List -->
                     <h6>Ingredients:</h6>
                     <ul>
-                        {% for ingredient in topping.ingredients.all %}
+                        {% for ingredient in container.ingredients.all %}
                         <li>{{ ingredient.name }}</li>
                         {% endfor %}
                     </ul>
