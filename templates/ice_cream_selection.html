@@ -10,18 +10,21 @@
     <hr>
 
     <div class="row">
-        {% for flavor in flavor %}
+        {% for flavor in flavors %}
         <div class="col-md-4 bg-light p-5">
             <div class="card" style="width: 20rem;">
+                <img src="{{flavor.image.url}}" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h6 class="card-title display-4 text-primary">{{ flavor.name }}</h6>
                     <p class="text-success bg-light">Price: {{ flavor.price }} Rs</p>
 
                     <!-- Display ingredients -->
-                    <h6>Ingredients:</h6>
+                    <h6 class="card-body display-7 text-secondary">Ingredients:</h6>
                     <ul>
-                        {% for ingredient in flavor.ingredients_set.all %}
-                        <li>{{ ingredient.name }}</li>
+                        {% for ingredient in flavors_ingredients %}
+                            {% if ingredient.flavor == flavor %}
+                                <li>{{ ingredient.flavor_ingredients }}</li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
 

@@ -3,14 +3,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 
-from app.models import IceCreamFlavours, Toppings, MyOrders, Containers
+from app.models import IceCreamFlavours, Toppings, MyOrders, Containers, Containers_Ingredients, Flavors_Ingredients, \
+    Toppings_Ingredients
 
 
 def Home(request):
     myflav = IceCreamFlavours.objects.all()
     mytop = Toppings.objects.all()
     context = {"myflav": myflav, "mytop": mytop}
-    return render(request, "home.html")
+    return render(request, "home.html",context)
 
 
 def HandleSignup(request):
@@ -77,64 +78,108 @@ def HandleLogout(request):
 
 def ice_cream_selection(request):
     flavors = IceCreamFlavours.objects.all()
-    context = {'flavors': flavors}
+    flavors_ingredients = Flavors_Ingredients.objects.all()
+    context = {'flavors': flavors, 'flavors_ingredients': flavors_ingredients}
     return render(request, 'ice_cream_selection.html', context)
 
 
 def toppings(request):
     mytop = Toppings.objects.all()
-    context = {"mytop": mytop}
+    toppings_ingredients = Toppings_Ingredients.objects.all()
+    context = {"mytop": mytop, 'toppings_ingredients': toppings_ingredients}
     return render(request, "toppings.html", context)
 
 def containers(request):
     mycont = Containers.objects.all()
-    context = {"mycont": mycont}
+    containers_ingredients = Containers_Ingredients.objects.all()
+    context = {"mycont": mycont, 'containers_ingredients': containers_ingredients}
     return render(request, "containers.html", context)
-
 
 def myorders(request):
     if not request.user.is_authenticated:
         messages.warning(request, "Please Login to place the Order....")
         return redirect("/login/")
+
     myflav = IceCreamFlavours.objects.all()
     mytop = Toppings.objects.all()
 
-    # i am writing a logic to get the user details orders
     current_user = request.user.username
 
-    # print(current_user)
-    # i am fetching the data from table MyOrders based on emailid
     items = MyOrders.objects.filter(email=current_user)
-    print(items)
+
     context = {"myflav": myflav, "mytop": mytop, "items": items}
+
     if request.method == "POST":
         name = request.POST.get("name")
         email = request.POST.get("email")
-        item = request.POST.get("items")
-        quan = request.POST.get("quantity")
-        phone = request.POST.get("num")
-        print(name, email, item, quan, phone)
+        flavor_id = request.POST.get("flavor")
+        topping_id = request.POST.get("toppings")
+        container_id=request.POST.get("containers")
+        quantity = request.POST.get("quantity")
+        phone_num = request.POST.get("num")
 
-        price = ""
-        for i in myflav:
-            if item == i.name:
-                price = i.price
+        # Retrieve selected flavor and topping objects
+        flavor = IceCreamFlavours.objects.get(id=flavor_id)
+        topping = Toppings.objects.get(id=topping_id)
+        container = Containers.objects.get(id=container_id)
 
-            pass
-        for i in mytop:
-            if item == i.topping_name:
-                price = i.topping_price
+        # Calculate total price
+        price = (flavor.price + topping.topping_price) * int(quantity)
 
-            pass
-
-        newPrice = int(price) * int(quan)
-        myquery = MyOrders(name=name, email=email, items=item, quantity=quan, price=newPrice,
-                           phone_num=phone)
+        # Create and save the order
+        myquery = MyOrders(name=name, email=email, flavor=flavor.name, toppings=topping.topping_name, containers=container.name, quantity=quantity, price=price, phone_num=phone_num)
         myquery.save()
+
         messages.info(request, f"Order is Successful")
         return redirect("/orders")
 
     return render(request, "orders.html", context)
+
+# def myorders(request):
+#     if not request.user.is_authenticated:
+#         messages.warning(request, "Please Login to place the Order....")
+#         return redirect("/login/")
+#     myflav = IceCreamFlavours.objects.all()
+#     mytop = Toppings.objects.all()
+#     mycont = Containers.objects.all()
+#
+#     # i am writing a logic to get the user details orders
+#     current_user = request.user.username
+#
+#     # print(current_user)
+#     # i am fetching the data from table MyOrders based on emailid
+#     items = MyOrders.objects.filter(email=current_user)
+#     print(items)
+#     context = {"myflav": myflav, "mytop": mytop, "mycont": mycont}
+#     if request.method == "POST":
+#         name = request.POST.get("name")
+#         email = request.POST.get("email")
+#         flavor_id = request.POST.get("flavor")
+#         topping_id = request.POST.get("toppings")
+#         container_id = request.POST.get("containers")
+#         item = request.POST.get("items")
+#         quantity = request.POST.get("quantity")
+#         print(name, email, item, quan)
+#
+#         price = ""
+#         for i in myflav:
+#             if item == i.name:
+#                 price = i.price
+#
+#             pass
+#         for i in mytop:
+#             if item == i.topping_name:
+#                 price = i.topping_price
+#
+#             pass
+#
+#         newPrice = int(price) * int(quan)
+#         myquery = MyOrders(name=name, email=email, items=item, quantity=quantity, price=newPrice, flavor=flavor.name)
+#         myquery.save()
+#         messages.info(request, f"Order is Successful")
+#         return redirect("/orders")
+#
+#     return render(request, "orders.html", context)
 
 
 # def orders(request):

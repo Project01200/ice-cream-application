@@ -5,6 +5,7 @@ from django.db import models
 class IceCreamFlavours(models.Model):
     name = models.CharField(max_length=20)
     price = models.IntegerField()
+    image = models.ImageField(upload_to="flavors", blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -13,6 +14,7 @@ class IceCreamFlavours(models.Model):
 class Toppings(models.Model):
     topping_name = models.CharField(max_length=20, unique=True)
     topping_price = models.IntegerField()
+    topping_image = models.ImageField(upload_to="toppings", blank=True, null=True)
 
     def __str__(self):
         return self.topping_name
@@ -21,6 +23,7 @@ class Toppings(models.Model):
 class Containers(models.Model):
     container_name = models.CharField(max_length=20)
     container_price = models.IntegerField()
+    container_image = models.ImageField(upload_to="containers", blank=True, null=True)
 
     def __str__(self):
         return self.container_name

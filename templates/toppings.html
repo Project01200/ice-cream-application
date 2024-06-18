@@ -1,4 +1,4 @@
-<!-- app/templates/toppings_selection.html -->
+<!-- toppings_selection.html -->
 
 {% extends "base.html" %}
 {% block title %} Toppings {% endblock title %}
@@ -10,18 +10,23 @@
     <hr>
 
     <div class="row">
-        {% for topping in toppings %}
+        {% for topping in mytop %}
         <div class="col-md-4 bg-light p-5">
             <div class="card" style="width: 20rem;">
+                {% if topping.topping_image %}
+                <img src="{{ topping.topping_image.url }}" class="card-img-top" alt="...">
+                {% endif %}
                 <div class="card-body">
-                    <h6 class="card-title display-4 text-primary">{{ topping.name }}</h6>
-                    <p class="text-success bg-light">Price: {{ topping.price }} Rs</p>
+                    <h6 class="card-title display-4 text-primary">{{ topping.topping_name }}</h6>
+                    <p class="text-success bg-light">Price: {{ topping.topping_price }} Rs</p>
 
                     <!-- Ingredients List -->
-                    <h6>Ingredients:</h6>
+                    <h6 class="card-body display-7 text-secondary">Ingredients:</h6>
                     <ul>
-                        {% for ingredient in topping.ingredients.all %}
-                        <li>{{ ingredient.name }}</li>
+                        {% for ingredient in toppings_ingredients %}
+                        {% if ingredient.topping == topping %}
+                        <li>{{ ingredient.topping_ingredients }}</li>
+                        {% endif %}
                         {% endfor %}
                     </ul>
 
