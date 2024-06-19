@@ -117,7 +117,7 @@
             <td>{{ item.price }}</td>
             <td>
               {% if item.delivery %}
-              <button type="button" class="btn btn-success btn-sm" disabled>
+              <button type="button" class="btn btn-success btn-sm" href="/orders/{{item.id}}" disabled>
                 <i class="fa fa-check"></i> Delivered
               </button>
               {% else %}
