@@ -95,6 +95,10 @@ def containers(request):
     context = {"mycont": mycont, 'containers_ingredients': containers_ingredients}
     return render(request, "containers.html", context)
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import IceCreamFlavours, Toppings, Containers, MyOrders
+
 def myorders(request):
     if not request.user.is_authenticated:
         messages.warning(request, "Please Login to place the Order....")
@@ -102,38 +106,65 @@ def myorders(request):
 
     myflav = IceCreamFlavours.objects.all()
     mytop = Toppings.objects.all()
+    mycont = Containers.objects.all()
 
-    current_user = request.user.username
+    current_user = request.user.email  # Assuming email is used for identifying the user
 
     items = MyOrders.objects.filter(email=current_user)
 
-    context = {"myflav": myflav, "mytop": mytop, "items": items}
+    context = {
+        "myflav": myflav,
+        "mytop": mytop,
+        "mycont": mycont,
+        "items": items,
+    }
 
     if request.method == "POST":
         name = request.POST.get("name")
         email = request.POST.get("email")
         flavor_id = request.POST.get("flavor")
-        topping_id = request.POST.get("toppings")
-        container_id=request.POST.get("containers")
+        topping_ids = request.POST.getlist("toppings")  # Use getlist for multiple selections
+        container_id = request.POST.get("container")
         quantity = request.POST.get("quantity")
-        phone_num = request.POST.get("num")
+        phone_num = request.POST.get("phone_num")
 
-        # Retrieve selected flavor and topping objects
-        flavor = IceCreamFlavours.objects.get(id=flavor_id)
-        topping = Toppings.objects.get(id=topping_id)
-        container = Containers.objects.get(id=container_id)
+        # Retrieve selected flavor, toppings, and container objects
+        try:
+            flavor = IceCreamFlavours.objects.get(id=flavor_id)
+            toppings = Toppings.objects.filter(id__in=topping_ids)
+            container = Containers.objects.get(id=container_id)
+        except IceCreamFlavours.DoesNotExist:
+            messages.error(request, "Selected Ice Cream Flavor does not exist.")
+            return redirect("/orders/")
+        except Containers.DoesNotExist:
+            messages.error(request, "Selected Container does not exist.")
+            return redirect("/orders/")
+        except Toppings.DoesNotExist:
+            messages.error(request, "One or more selected Toppings do not exist.")
+            return redirect("/orders/")
 
         # Calculate total price
-        price = (flavor.price + topping.topping_price) * int(quantity)
+        toppings_price = sum(topping.topping_price for topping in toppings)
+        price = (flavor.price + toppings_price ) * int(quantity)
 
         # Create and save the order
-        myquery = MyOrders(name=name, email=email, flavor=flavor.name, toppings=topping.topping_name, containers=container.name, quantity=quantity, price=price, phone_num=phone_num)
-        myquery.save()
+        myorder = MyOrders(
+            name=name,
+            email=email,
+            flavor=flavor.name,
+            toppings=", ".join(topping.topping_name for topping in toppings),
+            containers=container.name,
+            quantity=quantity,
+            price=price,
+            phone_num=phone_num,
+        )
+        myorder.save()
 
-        messages.info(request, f"Order is Successful")
-        return redirect("/orders")
+        messages.info(request, "Order is Successful")
+        return redirect("/orders/")
 
     return render(request, "orders.html", context)
+
 
 # def myorders(request):
 #     if not request.user.is_authenticated:
