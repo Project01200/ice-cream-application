@@ -1,0 +1,41 @@
+<!-- containers_selection.html -->
+
+{% extends "base.html" %}
+{% block title %} Containers {% endblock title %}
+{% block body %}
+{% load static %}
+
+<div class="container mt-2">
+    <h2 class="display-4 text-success text-center">Containers</h2>
+    <hr>
+
+    <div class="row">
+        {% for container in mycont %}
+        <div class="col-md-4 bg-light p-5">
+            <div class="card" style="width: 20rem;">
+                {% if container.container_image %}
+                <img src="{{ container.container_image.url }}" class="card-img-top" alt="...">
+                {% endif %}
+                <div class="card-body">
+                    <h6 class="card-title display-4 text-primary">{{ container.container_name }}</h6>
+                    <p class="text-success bg-light">Price: {{ container.container_price }} Rs</p>
+
+                    <!-- Ingredients List -->
+                    <h6 class="card-body display-7 text-secondary">Ingredients:</h6>
+                    <ul>
+                        {% for ingredient in containers_ingredients %}
+                        {% if ingredient.container == container %}
+                        <li>{{ ingredient.container_ingredients }}</li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock body %}

@@ -25,9 +25,8 @@
           <h5 class="display-4 text-center bg-dark text-light">SignUp</h5>
 
           <hr />
-          {% include "messages.html" %}  
-
-          <form action="/signup" method="post">
+          {% include "messages.html" %}
+          <form action="/signup/" method="post">
             {% csrf_token %}
 
             <label for="username">UserName</label>
@@ -112,7 +111,7 @@
             </div>
 
             <hr />
-            Already User? <a href="/login">Login</a>
+            Already User? <a href="/login/">Login</a>
           </form>
           <br />
           <hr>

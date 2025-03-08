@@ -1,32 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>Checkout</h1>
-    </header>
-    <main>
-        <section id="orderSummary">
-            <h2>Order Summary</h2>
-            <p id="summaryText"></p>
-            <h3>Total: $<span id="totalPrice"></span></h3>
-        </section>
-        <section id="coupon">
-            <h2>Apply Coupon</h2>
-            <input type="text" id="couponCode" placeholder="Enter coupon code">
-            <button onclick="applyCoupon()">Apply</button>
-        </section>
-        <button onclick="finalizeOrder()">Finalize Order</button>
-    </main>
-    <footer>
-        <p>&copy; 2024 Ice Cream Shop. All rights reserved.</p>
-    </footer>
+{% extends "base.html" %}
+{% block title %} Checkout {% endblock title %}
+{% block body %}
+{% load static %}
 
-    <script src="checkout.js"></script>
-</body>
-</html>
+{% comment %} <style>
+    /* CSS for the background image */
+    body {
+        background-image: url("{% static 'resources/chocolate.png' %}");
+        background-size: cover;
+        background-position: center;
+        /* Add any other styles for the body */
+        /* For example, you may want to set the font color to white for better visibility */
+        color: white;
+    }
+
+    /* Additional styles for the order summary section */
+    #orderSummary {
+        /* Add any specific styles for the order summary section */
+        /* For example, you may want to set the background color to transparent */
+        background-color: transparent;
+    }
+
+    /* Additional styles for other sections */
+    /* Add styles as needed */
+</style>  {% endcomment %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <section id="orderSummary" class="order-section">
+                <h2>Order Summary</h2>
+                <p id="summaryText">Your order details will appear here.</p>
+                <h3>Total: Rs.<span id="totalPrice">{{ total_price }}</span></h3>
+            </section>
+        </div>
+        <div class="col-lg-6">
+            <section id="coupon" class="order-section">
+                <h2>Apply Coupon</h2>
+                <div class="input-group mb-3">
+                    <input type="text" id="couponCode" class="form-control" placeholder="Enter coupon code">
+                    <button class="btn btn-outline-secondary" type="button" onclick="applyCoupon()">Apply</button>
+                </div>
+            </section>
+            <button class="btn btn-primary finalize-btn" onclick="finalizeOrder()">Finalize Order</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+    {% endblock body %}
